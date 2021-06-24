@@ -1,0 +1,181 @@
+---
+title: "Obtain variance for difference-in-difference from a Poisson log-linear model using the Delta Method"
+author: "Jade Benjamin-Chung"
+date: "12/5/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(msm)
+library(dplyr)
+source(here::here("0-config.R"))
+
+data_zip = readRDS(paste0(data_dir, "ceip-flu-data-age-sex-zip.RDS"))
+
+data = data_zip$All$all
+
+d1415 = data[data$seas>=1112 & data$seas!="1516" & data$seas!="1617" & data$seas!="1718",]
+d1415$time=ifelse(d1415$seas==1415,1,0)
+
+```
+
+# Objective
+
+When using count data to obtain estimates of incidence rates, log-linear models are commonly since a population-offset can be conveniently included in the model, so individual-level data is not required. This document uses the Delta Method to obtain the standard error for a difference-in-difference parameter using the coefficients from a log-linear model, fit as follows: 
+
+$\ln\bigg(\frac{E[Y|X, T]}{PT} \bigg) = \beta_0 + \beta_1X + \beta_2T + \beta_3 X\cdot T$
+
+- $Y$: count outcome
+- $PT$: person-time used to calculate rate
+- $X$: indicator for treatment
+- $T$: indicator for time
+
+The parameter of interest is:
+$$\text{DID} = \bigg( \bigg(\frac{E[Y|X=1, T=1]}{PT} \bigg) - \bigg(\frac{E[Y|X=1, T=0]}{PT}\bigg)\bigg) - 
+  \bigg(\bigg(\frac{E[Y|X=0, T=1]}{PT} \bigg) - \bigg(\frac{E[Y|X=0, T=0]}{PT}\bigg)\bigg) $$
+  
+Using the coefficients from the model above, the transformation function is:
+
+$F(\beta) = (e^{\beta_0 + \beta_1 + \beta_2 + \beta_3 } - e^{\beta_0 + \beta_1} )- (e^{\beta_0 + \beta_2} - e^{\beta_0})$
+
+
+
+
+# Calculate difference-in-difference by hand
+```{r hand}
+# Pre-program numerator and denominator
+data %>% group_by(dist) %>% 
+  filter(seas>=1112 & seas<1415) %>% 
+  group_by(seas, dist) %>%
+  summarise(flucases = sum(flucases), pop = sum(N)) %>%
+  group_by(dist) %>%
+  summarise(flucases = mean(flucases), pop = mean(pop)) 
+
+# 2014-15 numerator and denominator
+data %>% filter(seas==1415) %>% 
+  group_by(dist) %>%
+  summarise(flucases = sum(flucases), pop = sum(N)) 
+
+((158/447832)-(117/447832))-((113/255318)-(56/255318))
+```
+
+# Obtain ratio of incidence ratios using Poisson model
+
+```{r poisson}
+glm.fit=glm(flucases ~ tr*time,offset=logN,data=d1415,
+             family=poisson(link=log))
+```
+
+# Use Delta Method to get variance for difference-in-difference
+
+## Step 1: Get partial derivatives of $F(\beta)$ with respect to each parameter 
+
+$\frac{dF}{d\beta_0} = (e^{\beta_0 + \beta_1 + \beta_2 + \beta_3 } - e^{\beta_0 + \beta_1} )- (e^{\beta_0 + \beta_2} - e^{\beta_0} )$
+
+$\frac{dF}{d\beta_1} = e^{\beta_0 + \beta_1 + \beta_2 + \beta_3 } - e^{\beta_0 + \beta_1}$
+
+$\frac{dF}{d\beta_2} = e^{\beta_0 + \beta_1 + \beta_2 + \beta_3 } - e^{\beta_0 + \beta_2}$
+
+$\frac{dF}{d\beta_3} = e^{\beta_0 + \beta_1 + \beta_2 + \beta_3 }$  
+
+
+```{r betas}
+# Gradient 
+b0 = glm.fit$coefficients[1]
+b1 = glm.fit$coefficients[2]
+b2 = glm.fit$coefficients[3]
+b3 = glm.fit$coefficients[4]
+
+dfdb0 = (exp(b0 + b1 + b2 + b3) - exp(b0 + b1)) - 
+          (exp(b0 + b2) - (exp(b0)))
+dfdb1 = exp(b0 + b1 + b2 + b3) - exp(b0 + b1)
+dfdb2 = exp(b0 + b1 + b2 + b3) - exp(b0 + b2) 
+dfdb3 = exp(b0 + b1 + b2 + b3) 
+
+grad <- c(dfdb0, dfdb1, dfdb2, dfdb3)
+names(grad) <- c("dfdb0", "dfdb1", "dfdb2", "dfdb3")
+grad
+```
+
+
+## Step 2: Get the covariance variance matrix from regression output 
+
+```{r vcov}
+vb <- vcov(glm.fit)
+vb
+```
+
+
+## Step 3: Calculate the variance 
+$Var(F(\beta)) = J V J^T$, where $J$ is the Jacobian or gradient (derivative of $F(\beta)$ with respect to each parameter) and $V$ is the variance covariance matrix. 
+
+```{r vcovdelta}
+vF <- t(grad) %*% vb %*% grad
+vF
+
+seF <- sqrt(vF)
+seF
+```
+
+## Obtain difference-in-difference and 95% CI from log-linear model
+
+```{r makefun}
+get_did = function(fit){
+  
+# Gradient 
+b0 = fit$coefficients[1]
+b1 = fit$coefficients[2]
+b2 = fit$coefficients[3]
+b3 = fit$coefficients[4]
+
+dfdb0 = (exp(b0 + b1 + b2 + b3) - exp(b0 + b1)) - 
+          (exp(b0 + b2) - (exp(b0)))
+dfdb1 = exp(b0 + b1 + b2 + b3) - exp(b0 + b1)
+dfdb2 = exp(b0 + b1 + b2 + b3) - exp(b0 + b2) 
+dfdb3 = exp(b0 + b1 + b2 + b3) 
+
+grad <- c(dfdb0, dfdb1, dfdb2, dfdb3)
+names(grad) <- c("dfdb0", "dfdb1", "dfdb2", "dfdb3")
+grad
+
+# Estimate DID
+did = (exp(b0+b1+b2+b3) - exp(b0+b1)) - (exp(b0+b2) - exp(b0))
+
+# Variance-covariance matrix
+vb <- vcov(fit)
+vb
+
+# Variance of DID
+vF <- t(grad) %*% vb %*% grad
+vF
+
+se = sqrt(vF)
+
+# 95% CI 
+lb = did - (qnorm(0.975)*sqrt(vF))
+ub = did + (qnorm(0.975)*sqrt(vF))
+
+return(list = c(did = did, se =se, lb = lb, ub = ub))
+
+}
+
+get_did(glm.fit)
+
+```
+
+## Use deltamethod package to obtain difference-in-difference and 95% CI from log-linear model
+
+```{r pkg}
+g = as.formula(~ (exp(x1+x2+x3+x4) - exp(x1+x2)) - (exp(x1+x3) -    
+              exp(x1)))
+deltamethod(g = g, coef(glm.fit), vcov(glm.fit))
+```
+
+## Compare to exponentiated beta3 coefficient
+
+```{r glm}
+summary(glm.fit)
+```
+

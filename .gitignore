@@ -1,0 +1,12 @@
+.Rproj.user
+*.Rhistory
+.ds_store
+.DS_Store
+*.Rproj
+*.RData
+*.Rout
+coverage/data/
+coverage/results/
+
+hospitalizations/data/
+hospitalizations/results/

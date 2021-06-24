@@ -1,0 +1,15 @@
+"","district","race_cat","n","prop"
+"1","OUSD","api_black",22,0.120218579234973
+"2","OUSD","api_latino",16,0.087431693989071
+"3","OUSD","api_white",30,0.163934426229508
+"4","OUSD","black_latino",26,0.14207650273224
+"5","OUSD","black_white",24,0.131147540983607
+"6","OUSD","other",47,0.256830601092896
+"7","OUSD","white_latino",18,0.0983606557377049
+"8","WCCUSD","api_black",35,0.0843373493975904
+"9","WCCUSD","api_latino",39,0.0939759036144578
+"10","WCCUSD","api_white",72,0.173493975903614
+"11","WCCUSD","black_latino",39,0.0939759036144578
+"12","WCCUSD","black_white",33,0.0795180722891566
+"13","WCCUSD","other",101,0.243373493975904
+"14","WCCUSD","white_latino",96,0.231325301204819
