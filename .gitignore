@@ -5,8 +5,8 @@
 *.Rproj
 *.RData
 *.Rout
-coverage/data/
-coverage/results/
+vaxcov/data/
+vaxcov/results/
 
 hospitalizations/data/
 hospitalizations/results/
