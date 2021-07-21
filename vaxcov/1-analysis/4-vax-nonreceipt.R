@@ -1,7 +1,10 @@
-########################################
-# Vaccine coverage survey conducted in March 2017
-# Calculate mean difference in vax stratified by race
-########################################
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverage analysis
+
+# Find percentages of each reported reason
+# for vaccine non-receipt
+##########################################
 
 rm(list=ls())
 
@@ -9,12 +12,12 @@ rm(list=ls())
 source(here::here("0-config.R"))
 library(purrr)
 
-load(paste0(clean_data_path_2017,".RData"))
-data <- data.import
-load(paste0(clean_data_path_2018, ".RData"))
 load(district_demographics_path)
 
-data.y4 <- data.import
+data = read.csv(data_path_2017)
+data$dist=factor(data$dist,levels=c("WCCUSD","OUSD"))
+
+data.y4 = read.csv(data_path_2018)
 data.y4$dist=factor(data.y4$dist,levels=c("WCCUSD","OUSD"))
 
 # drop Wilson because it has no matched pair
@@ -59,16 +62,16 @@ multi_nonreceipt$Race = "Multiple"
 nonreceipt_tbl = bind_rows(white.y4.no.missing, black.y4.no.missing, api.y4.no.missing, latino.y4.no.missing, multi.y4.no.missing)
 nonreceipt_tbl = nonreceipt_tbl %>% bind_rows() %>% 
   mutate(reason_cat = case_when(whynot == "It costs too much" ~ "Logistics",
-                                whynot == "I didn’t have time to take my student to the doctor" ~ "Logistics",
+                                whynot == "I didn't have time to take my student to the doctor" ~ "Logistics",
                                 whynot == "I thought my student needed health insurance to get it" ~ "Logistics",
-                                whynot == "I didn’t know where to get it" ~ "Logistics", 
-                                whynot == "I didn’t receive the consent form to get the vaccine at school" ~ "SLIV-specific concerns", 
+                                whynot == "I didn't know where to get it" ~ "Logistics", 
+                                whynot == "I didn't receive the consent form to get the vaccine at school" ~ "SLIV-specific concerns", 
                                 whynot == "I forgot to return the consent form to get the vaccine at school" ~ "SLIV-specific concerns",
-                                whynot == "I didn’t want to share my insurance information on the consent form to get the vaccine at school" ~ "SLIV-specific concerns",
-                                whynot == "I don’t believe in it" ~ "Non-belief", 
+                                whynot == "I didn't want to share my insurance information on the consent form to get the vaccine at school" ~ "SLIV-specific concerns",
+                                whynot == "I don't believe in it" ~ "Non-belief", 
                                 whynot == "I believe it might make my student sick" ~ "Non-belief",
                                 whynot == "My student is afraid of needles" ~ "Logistics",
-                                whynot == "I didn’t trust schools to vaccinate my student" ~ "SLIV-specific concerns", 
+                                whynot == "I didn't trust schools to vaccinate my student" ~ "SLIV-specific concerns", 
                                 whynot == "Our doctor did not recommend it" ~ "Non-belief"),
          Logistics = ifelse(reason_cat == "Logistics", 1, 0), 
          Nonbelief = ifelse(reason_cat == "Non-belief", 1, 0), 

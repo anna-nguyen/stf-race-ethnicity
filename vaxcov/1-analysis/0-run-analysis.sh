@@ -1,6 +1,5 @@
 #!/bin/bash
 
-R CMD BATCH 0-demographics.R
 R CMD BATCH 1-survey-demographics.R
 R CMD BATCH 2-mean-diff.R
 R CMD BATCH 3-mean-vaxcov-levels.R

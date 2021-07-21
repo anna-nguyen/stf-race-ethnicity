@@ -1,11 +1,19 @@
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverage analysis
+
+# Find study distributions of race/ethnicity 
+# and highest parental education level
+##########################################
+
 # define directories, load libraries
 source(here::here("0-config.R"))
 
 #---------------------------------------------
 # 2017 survey
 #---------------------------------------------
-load(paste0(clean_data_path_2017,".RData"))
-data = data.import
+
+data = read.csv(data_path_2017)
 data$dist=as.factor(data$dist)
 
 data$edu=as.character(data$edu)
@@ -69,8 +77,8 @@ write.csv(multi_race2017, paste0(local_tab_path, "/multi_race2017.csv"))
 #---------------------------------------------
 # 2018 survey
 #---------------------------------------------
-load(paste0(clean_data_path_2018, ".Rdata"))
-data=data.import
+data = read.csv(data_path_2018)
+data$dist=as.factor(data$dist)
 
 data$edu=as.character(data$edu)
 

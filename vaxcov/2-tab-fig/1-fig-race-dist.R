@@ -1,8 +1,10 @@
-########################################
-# Vaccine coverage survey conducted in March 2017
-# Create figures for presentation
-# Distribution of student race
-########################################
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverage analysis
+
+# Plot race/ethnicity distributions for 
+# district vs schools vs survey
+##########################################
 
 rm(list = ls())
 # define directories, load libraries

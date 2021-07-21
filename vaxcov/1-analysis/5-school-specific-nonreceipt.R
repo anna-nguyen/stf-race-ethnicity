@@ -1,4 +1,12 @@
-rm(list=ls())
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverage analysis
+
+# Merge percentage of reported reason for
+# non-receipt with school-level characteristics
+##########################################
+
+rm(list = ls())
 
 source(here::here("0-config.R"))
 library(tidyr)

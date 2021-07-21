@@ -1,7 +1,10 @@
-########################################
-# Vaccine coverage survey conducted in March 2017
-# Generate table and figure of mean difference in vax stratified by race
-########################################
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverage analysis
+
+# Generate table and figure of mean 
+# difference in vax stratified by race
+##########################################
 
 rm(list = ls())
 

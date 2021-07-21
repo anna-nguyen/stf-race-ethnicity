@@ -1,3 +1,11 @@
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverage analysis
+
+# Generate table and figure of 
+# distributions of reasons for non-receipt
+##########################################
+
 rm(list=ls())
 
 source(here::here("0-config.R"))

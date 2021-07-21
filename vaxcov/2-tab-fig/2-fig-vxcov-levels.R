@@ -1,7 +1,11 @@
-########################################
-# Vaccine coverage survey conducted in March 2017
-# Calculate mean difference in vax stratified by race
-########################################
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverage analysis
+
+# Plot vaccine coverage levels for each 
+# race/ethnicity in both districts for
+# each season
+##########################################
 
 rm(list=ls())
 

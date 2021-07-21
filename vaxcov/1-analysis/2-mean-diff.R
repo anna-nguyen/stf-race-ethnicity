@@ -1,7 +1,10 @@
-########################################
-# Vaccine coverage survey conducted in March 2017
-# Calculate mean difference in vax stratified by race
-########################################
+##########################################
+# Shoo the Flu evaluation
+# Vaccination coverate analysis
+
+# Calculate the mean difference in vaccine
+# coverage between districts
+##########################################
 
 rm(list=ls())
 
@@ -9,14 +12,12 @@ rm(list=ls())
 source(here::here("0-config.R"))
 library(gridExtra)
 
-load(paste0(clean_data_path_2017,".RData"))
-data <- data.import
-load(paste0(clean_data_path_2018, ".RData"))
 load(district_demographics_path)
 
+data = read.csv(data_path_2017)
 data$dist=factor(data$dist,levels=c("WCCUSD","OUSD"))
 
-data.y4 <- data.import
+data.y4 = read.csv(data_path_2018)
 data.y4$dist=factor(data.y4$dist,levels=c("WCCUSD","OUSD"))
 
 # drop Wilson because it has no matched pair
