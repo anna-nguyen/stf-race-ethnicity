@@ -6,11 +6,11 @@ To rerun all scripts in this project, run the bash script `0-run-vaxcov.sh`
 
 `0-base-functions`: scripts containing functions used in the analysis.
 
-`1-dm`: data cleaning/processing scripts. To rerun all scripts in this subdirectory, run the bash script `0-run-cleaning.sh`
+`1-analysis`: analysis scripts. To rerun all scripts in this subdirectory, run the bash script `0-run-analysis.sh`
 
-`2-analysis`: analysis scripts. To rerun all scripts in this subdirectory, run the bash script `0-run-analysis.sh`
+`2-fig-tab`: scripts to produce tables and figures. To rerun all scripts in this subdirectory, run the bash script `0-run-tab-fig.sh`
 
-`3-fig-tab`: scripts to produce tables and figures. To rerun all scripts in this subdirectory, run the bash script `0-run-tab-fig.sh`
+`results`: intermediate results files
 
 `figures`: figure files
 
