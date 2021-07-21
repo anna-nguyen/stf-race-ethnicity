@@ -1,9 +1,8 @@
 #!/bin/bash
 
-
-cd 2-analyze
+cd 1-analyze
 bash 0-run-analysis.sh
 
 cd ..
-cd 3-figures
+cd 2-figures
 bash 0-run-figures.sh

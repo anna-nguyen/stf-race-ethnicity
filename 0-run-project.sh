@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd coverage
+cd vaxcov
 bash 0-run-vaxcov.sh
 
 cd ..
