@@ -11,8 +11,10 @@ rm(list = ls())
 # define directories, load libraries
 source(here::here("0-config.R"))
 
-all = readRDS(paste0(local_res_path, "/mean_diff_race.csv"))
-all_adjedu = readRDS(paste0(local_res_path, "/adj_mean_diff_race.csv"))
+all = readRDS(paste0(local_res_path, "/mean_diff_race.csv")) %>% 
+  mutate(Race = ifelse(Race == "Latino", "Hispanic/Latino", Race))
+all_adjedu = readRDS(paste0(local_res_path, "/adj_mean_diff_race.csv")) %>% 
+  mutate(Race = ifelse(Race == "Latino", "Hispanic/Latino", Race))
 
 # Plot differences
 vaxcov_diff_race = ggplot(all, aes(y = pt.est, x = Season)) +

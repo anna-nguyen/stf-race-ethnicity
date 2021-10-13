@@ -13,10 +13,11 @@ library(tidyr)
 library(lmtest)
 library(data.table)
 
-nonreceipt_tbl = readRDS(paste0(local_res_path, "/reasons_for_nonreceipt.RDS"))
+nonreceipt_tbl = readRDS(paste0(local_res_path, "/reasons_for_nonreceipt.RDS")) %>% 
+  mutate(race = ifelse(race == "Latino", "Hispanic/Latino", race))
 
 ## Find estimates and CIs
-race_vars = rep(c("White", "Asian/Pacific Islander", "Multiple Races", "Black/African American", "Latino"), 3)
+race_vars = rep(c("White", "Asian/Pacific Islander", "Multiple Races", "Black/African American", "Hispanic/Latino"), 3)
 reason_vars = rep(c("Logistics", "Nonbelief", "SLIVreason"), 5)
 
 nonreceipt = data.frame(race = race_vars,

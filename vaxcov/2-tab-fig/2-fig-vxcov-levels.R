@@ -17,7 +17,7 @@ vaxcov_tbl = readRDS(paste0(local_res_path, "/race_dist_vaxcov.RDS"))
               
 vaxcov_plt_tbl = vaxcov_tbl %>% 
   mutate(race = case_when(race == "API" ~ "Asian/Pacific Islander", 
-                          race == "Latino" ~ "Latino",
+                          race == "Latino" ~ "Hispanic/Latino",
                           race == "Black" ~ "Black/African American", 
                           race == "Multi" ~ "Multiple Races", 
                           TRUE ~ race), 

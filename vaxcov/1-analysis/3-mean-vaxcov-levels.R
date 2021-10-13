@@ -43,7 +43,7 @@ data.y4 = data.y4 %>% mutate(race = ifelse(race == "Asian" | race == "Pacific is
 #----------------------------------------------------------------------
 vax_vars = rep(c("vx1415yn", "vx1516yn", "vx1617yn", "vx1718yn"), 5)
 season_vars = rep(c("2014-15", "2015-16", "2016-17", "2017-18"), 5)
-race_vars = rep(c("White", "API", "Multi", "Black", "Latino"), 4)
+race_vars = rep(c("White", "API", "Multi", "Black", "Hispanic/Latino"), 4)
 
 vaxcov_tbl = data.frame(race = race_vars) %>% 
   mutate(season = season_vars, vax_col = vax_vars) %>% 

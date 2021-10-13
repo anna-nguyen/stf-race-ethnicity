@@ -61,21 +61,20 @@ yellow = "#BB9D00"
 green = "#00B81F"
 pink = "#E76BF3"
 cols = c(yellow, green, pink)
-shapes = c(17, 16)
+shapes = c(17, 16, 15)
 
 
 res_data = res_data %>% 
   mutate(Race = case_when(as.character(Race) == "Asian / Pacific Islander" ~ "Asian/Pacific Islander",
-                          as.character(Race) == "Hispanic" ~ "Hispanic/Latino", 
                           as.character(Race) == "Two or more races" ~ "Multiple", 
                           TRUE ~ as.character(Race))) %>% 
   filter(Race != "Other")
 
 plt_did_race = ggplot(res_data %>% filter(Age != "Non-Elementary Aged"), 
                       aes(x = Season, y = estimate)) + 
-  geom_point(aes(col = Race, shape = effect), 
+  geom_point(aes(shape = Race), 
              position = position_dodge(width=0.5), size = 2) +
-  geom_linerange(aes(ymin = lb, ymax = ub, col = Race, shape = effect), 
+  geom_linerange(aes(ymin = lb, ymax = ub, shape = Race), 
                 position = position_dodge(width=0.5)) + 
   geom_hline(yintercept = 0, linetype = "dashed") +
   ylab("Difference-in-difference in\ncumulative incidence per 100,000") +
@@ -90,9 +89,9 @@ ggsave(here::here("figures", "fluhosp_did_race.png"),
 
 plt_did_race_nonelem = ggplot(res_data %>% filter(Age == "Non-Elementary Aged"), 
                       aes(x = Season, y = estimate)) + 
-  geom_point(aes(col = Race, shape = effect), 
+  geom_point(aes(shape = Race), 
              position = position_dodge(width=0.5), size = 2) +
-  geom_linerange(aes(ymin = lb, ymax = ub, col = Race, shape = effect), 
+  geom_linerange(aes(ymin = lb, ymax = ub, shape = Race), 
                  position = position_dodge(width=0.5)) + 
   geom_hline(yintercept = 0, linetype = "dashed") +
   ylab("Difference-in-difference in\ncumulative incidence per 100,000") +

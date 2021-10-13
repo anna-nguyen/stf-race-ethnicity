@@ -10,9 +10,10 @@ rm(list = ls())
 # define directories, load libraries
 source(here::here("0-config.R"))
 
-load(paste0(clean_data_path_2017, ".RData"))
-data <- data.import
 load(district_demographics_path)
+
+data = read.csv(data_path_2017)
+data$dist=factor(data$dist,levels=c("WCCUSD","OUSD"))
 
 #relabel race categories
 data$race = as.character(data$race)
@@ -21,6 +22,8 @@ data$race[data$race == "Multi"] = "Multiple Races"
 data$race[data$race == "Missing"] = "Not reported"
 data$race[data$race == "Asian"] = "Asian/Pacific Islander"
 data$race[data$race == "Pacific islander"] = "Asian/Pacific Islander"
+data$race[data$race == "Latino"] = "Hispanic/Latino"
+
 
 data$race = as.factor(data$race)
 svy.race = as.data.frame(prop.table(table(data$race, data$dist), 2) * 100)
@@ -43,6 +46,7 @@ dist.race.l$dist[dist.race.l$dist == "oak"] = "Intervention district"
 dist.race.l$dist[dist.race.l$dist == "wcc"] = "Comparison district"
 dist.race.l$type = "Entire district"
 dist.race.l$race[dist.race.l$race == "African American"] = "Black/African American"
+dist.race.l$race[dist.race.l$race == "Latino"] = "Hispanic/Latino"
 dist.race.l$race[dist.race.l$race == "Multiple"] = "Multiple Races"
 
 
@@ -59,12 +63,14 @@ dist.race.s.l$dist[dist.race.s.l$dist == "wcc"] = "Comparison district"
 dist.race.s.l$type = "Schools\nin sample"
 dist.race.s.l$race[dist.race.s.l$race == "African American"] = "Black/African American"
 dist.race.s.l$race[dist.race.s.l$race == "Multiple"] = "Multiple Races"
+dist.race.s.l$race[dist.race.s.l$race == "Latino"] = "Hispanic/Latino"
+
 
 race = rbind(svy.race, dist.race.l, dist.race.s.l)
 race$race.f = factor(
   race$race,
   levels = c(
-    "Latino",
+    "Hispanic/Latino",
     "Black/African American",
     "Asian/Pacific Islander",
     "White",

@@ -41,7 +41,7 @@ tab_dir = paste0(here::here(), "/tables/")
 cdph_pre17 = paste0(here::here(), "/data-cdph/ILIData_CA_201101_201739.csv")
 cdph_1718 = paste0(here::here(), "/data-cdph/ShooTheFluRequest_2017_2018Season.csv")
 
-source(paste0(here::here(), "/3-figures/theme_complete_bw.R"))
+source(paste0(here::here(), "/2-figures/theme_complete_bw.R"))
 
 #--------------------------------------------
 # define zip codes for various analyses

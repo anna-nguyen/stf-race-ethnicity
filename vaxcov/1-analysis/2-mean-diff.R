@@ -37,7 +37,7 @@ white = data %>% filter(race == "White")
 API = data %>% filter(race == "API") 
 multi = data %>% filter(race == "Multi")
 black = data %>% filter(race == "Black")
-latino = data %>% filter(race == "Latino")
+latino = data %>% filter(race == "Hispanic/Latino")
 
 
 data.y4$race = as.character(data.y4$race)
@@ -49,7 +49,7 @@ white.y4 = data.y4 %>% filter(race == "White")
 API.y4 = data.y4 %>% filter(race == "API")
 multi.y4 = data.y4 %>% filter(race == "Multi")
 black.y4 = data.y4 %>% filter(race == "Black")
-latino.y4 = data.y4 %>% filter(race == "Latino")
+latino.y4 = data.y4 %>% filter(race == "Hispanic/Latino")
 
 
 # function to fit glm and format result
@@ -160,7 +160,7 @@ res.latino.y4 = fit_vxcov(1718, latino.y4)
 
 latino_res = as.data.frame(rbind(res.latino.y1, res.latino.y2, res.latino.y3, res.latino.y4)) %>%
   mutate(year = c(1, 2, 3, 4),
-         race = "Latino") %>%
+         race = "Hispanic/Latino") %>%
   dplyr::select(year, race, everything())
 
 #----------------------------------------
@@ -175,7 +175,7 @@ res.latino.adjedu.y4 = fit_vxcov(1718, latino.y4, adj_edu = TRUE)
 latino_adjedu_res = as.data.frame(rbind(res.latino.adjedu.y1, res.latino.adjedu.y2, 
                                         res.latino.adjedu.y3, res.latino.adjedu.y4)) %>%
   mutate(year = c(1, 2, 3, 4),
-         race = "Latino") %>%
+         race = "Hispanic/Latino") %>%
   dplyr::select(year, race, everything())
 
 #----------------------------------------
@@ -221,7 +221,7 @@ all = all %>% mutate(pval = round(pval, 3),
   rename("Race" = "race") %>% 
   mutate(Race = case_when(Race == "Multi" ~ "Multiple Races",
                           Race == "Black" ~ "Black/African American",
-                          Race == "Latino" ~ "Latino", 
+                          Race == "Latino" ~ "Hispanic/Latino", 
                           Race == "Asian / Pacific Islander" ~ "Asian/Pacific Islander",
                           TRUE ~ Race))
 
@@ -243,7 +243,7 @@ all_adjedu = all_adjedu %>% mutate(pval = round(pval, 3),
   rename("Race" = "race") %>% 
   mutate(Race = case_when(Race == "Multi" ~ "Multiple Races",
                           Race == "Black" ~ "Black/African American",
-                          Race == "Latino" ~ "Latino", 
+                          Race == "Latino" ~ "Hispanic/Latino", 
                           Race == "Asian / Pacific Islander" ~ "Asian/Pacific Islander",
                           TRUE ~ Race))
 
